@@ -218,8 +218,12 @@ module Foreman #:nodoc:
     end
 
     def pending_migrations
-      migrations = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations
-      migrations.size > 0
+      migration_paths = ActiveRecord::Migrator.migrations(
+        ActiveRecord::Migrator.migrations_paths)
+      pending_migrations = ActiveRecord::Migrator.new(:up, migration_paths).
+        pending_migrations
+
+      pending_migrations.size > 0
     end
 
     # List of helper methods allowed for templates in safe mode
