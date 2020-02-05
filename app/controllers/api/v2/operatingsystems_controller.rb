@@ -88,7 +88,7 @@ module Api
       param :architecture, String
 
       def bootfiles
-        Foreman::Deprecation.api_deprecation_warning("Bootfiles should be calculated per host")
+        Foreman::Deprecation.api_deprecation_warning("Bootfiles should be calculated per host", 1.0)
 
         medium = Medium.authorized(:view_media).find(params[:medium])
         arch   = Architecture.authorized(:view_architectures).find(params[:architecture])

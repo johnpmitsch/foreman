@@ -10,8 +10,10 @@ module Foreman
       raise Foreman::Exception.new(N_("Invalid version format, please enter in x.y (only major version).")) unless foreman_version_deadline.to_s =~ /\A\d[.]\d+\z/
     end
 
-    def self.api_deprecation_warning(info)
-      ActiveSupport::Deprecation.warn("Your API call uses deprecated behavior, #{info}", caller)
+    # The options deadline version argument can be used in testing to ensure deprecated behavior is removed
+    def self.api_deprecation_warning(info, foreman_version_deadline = nil)
+      check_version_format foreman_version_deadline if foreman_version_deadline
+      ActiveSupport::Deprecation.warn("Your API call uses deprecated behavior, #{info}")
     end
 
     def self.renderer_deprecation(foreman_version_deadline, method, new_method)

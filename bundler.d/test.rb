@@ -15,6 +15,7 @@ group :test do
   gem 'rubocop-checkstyle_formatter', '~> 0.2'
   gem 'rubocop-performance', '~> 1.5.0'
   gem 'rubocop-rails', '~> 2.3.2'
+  gem 'parser', '~> 2.7'
   gem 'poltergeist', '>= 1.18.0', :require => false
   gem 'selenium-webdriver', :require => false
   gem 'shoulda-matchers', '~> 4.0'
