@@ -41,6 +41,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^0.23.1",
     "dotenv": "^5.0.0",
+    "downshift": "^5.4.2",
     "eslint": "^6.7.2",
     "expose-loader": "~0.6.0",
     "extract-text-webpack-plugin": "^3.0.0",

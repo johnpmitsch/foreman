@@ -3,13 +3,12 @@ import { Pagination, Flex, FlexItem } from '@patternfly/react-core';
 
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { usePaginationOptions, useForemanSettings } from 'foremanReact/Root/Context/ForemanContext';
+import { usePaginationOptions, useForemanSettings } from '../../../Root/Context/ForemanContext';
 
 import MainTable from './MainTable';
-import Search from '../../components/Search';
-import { orgId } from '../../services/api';
+import Search from '../Search';
 
-/* Patternfly 4 table wrapper */
+/* Patternfly 4 table wrapper that adds search and pagination to the basic PF4 table */
 const TableWrapper = ({
   children,
   metadata,
@@ -19,6 +18,7 @@ const TableWrapper = ({
   updateSearchQuery,
   additionalListeners,
   activeFilters,
+  organizationId,
   ...allTableProps
 }) => {
   const dispatch = useDispatch();
@@ -41,8 +41,8 @@ const TableWrapper = ({
 
   useEffect(() => updatePagination(metadata), [metadata]);
 
-  // The search component will update the search query when a search is performed, listen for that
-  // and perform the search so we can be sure the searchQuery is updated when search is performed.
+  // The search component will update `searchQuery` when a search is performed, listen for that
+  // and perform the search so we can be sure `searchQuery` is updated when search is performed.
   useEffect(() => {
     if (searchQuery || activeFilters) {
       // Reset page back to 1 when filter or search changes
@@ -55,7 +55,8 @@ const TableWrapper = ({
   const getAutoCompleteParams = search => ({
     endpoint: autocompleteEndpoint,
     params: {
-      organization_id: orgId(),
+      // update to dynamically include org
+      organization_id: organizationId,
       search,
     },
   });
@@ -119,6 +120,7 @@ TableWrapper.propTypes = {
     PropTypes.string,
   ])),
   activeFilters: PropTypes.bool,
+  organizationId: PropTypes.number,
 };
 
 TableWrapper.defaultProps = {
@@ -126,6 +128,7 @@ TableWrapper.defaultProps = {
   children: null,
   additionalListeners: [],
   activeFilters: false,
+  organizationId: null,
 };
 
 export default TableWrapper;
