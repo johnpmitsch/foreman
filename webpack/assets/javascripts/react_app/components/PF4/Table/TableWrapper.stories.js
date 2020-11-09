@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
-import axios from 'axios';
 import { TableVariant } from '@patternfly/react-table';
-import { MockAdapter } from '@theforeman/test';
 import TableWrapper from './TableWrapper';
 import ContextFeatures from '../../Pagination/Context.fixtures';
 import { getForemanContext } from '../../../Root/Context/ForemanContext';
 import Story from '../../../../../../stories/components/Story';
 import store from '../../../redux';
+import API from '../../../redux/API/API';
 import { API_OPERATIONS, get } from '../../../redux/API';
 
 const ForemanContext = getForemanContext();
@@ -23,22 +22,30 @@ export default {
   ],
 };
 
+window.URL_PREFIX = ""
+
+const sandwichApiCall = (params = {}) => get({
+  type: API_OPERATIONS.GET,
+  key: "SANDWICHES",
+  url: sandwichApiUrl,
+})
+API.get.mockImplementationOnce(async () => ({ results }));
+
 
 export const defaultStory = () => {
   // Setting up API call mock
   const sandwichApiUrl = "/sandwiches";
-  const mock = new MockAdapter(axios);
   const results = [
     [{ title: 'rye' }, { title: 'pastrami' }, { title: 'swiss' }],
     [{ title: 'wheat' }, { title: 'ham' }, { title: 'cheese' }],
     [{ title: 'focaccia' }, { title: 'tofu' }, { title: 'havarti' }],
   ]
-  mock.onGet().reply(() => {
-      new Promise(resolve => {
-        resolve([200, results || []]);
-      })
-    }
-  );
+  //mock.onGet('/sandwiches').reply(() => {
+  //    new Promise(resolve => {
+  //      resolve([200, results || []]);
+  //    })
+  //  }
+  //);
 
   // Handling state for table, search, and metadata
   const [rows, setRows] = useState([]);
@@ -47,12 +54,6 @@ export const defaultStory = () => {
 
   // Patternfly 4 column/cell header format
   const columnHeaders = [ __('bread'), __('protein'), __('cheese') ];
-  const sandwichApiCall = (params = {}) => get({
-    type: API_OPERATIONS.GET,
-    key: "SANDWICHES",
-    url: sandwichApiUrl,
-  })
-
   // Empty content messages
   const emptyContentTitle = __("You currently don't have any sandwiches");
   const emptyContentBody = __('Please add some sandwiches.'); // needs link
