@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { TableVariant } from '@patternfly/react-table';
 import TableWrapper from './TableWrapper';
 import ContextFeatures from '../../Pagination/Context.fixtures';
 import { getForemanContext } from '../../../Root/Context/ForemanContext';
+import { STATUS } from '../../../constants';
 import Story from '../../../../../../stories/components/Story';
 import store from '../../../redux';
-import API from '../../../redux/API/API';
-import { API_OPERATIONS, get } from '../../../redux/API';
 
 const ForemanContext = getForemanContext();
 
@@ -22,38 +21,43 @@ export default {
   ],
 };
 
-window.URL_PREFIX = ""
-
-const sandwichApiCall = (params = {}) => get({
-  type: API_OPERATIONS.GET,
-  key: "SANDWICHES",
-  url: sandwichApiUrl,
-})
-API.get.mockImplementationOnce(async () => ({ results }));
-
-
 export const defaultStory = () => {
-  // Setting up API call mock
-  const sandwichApiUrl = "/sandwiches";
-  const results = [
-    [{ title: 'rye' }, { title: 'pastrami' }, { title: 'swiss' }],
-    [{ title: 'wheat' }, { title: 'ham' }, { title: 'cheese' }],
-    [{ title: 'focaccia' }, { title: 'tofu' }, { title: 'havarti' }],
+  const fakeMetadata = { total: 3, subtotal: 3, page: 1, per_page: 20, search: "" };
+  const sandwiches = [
+    { bread: 'rye', protein: 'pastrami', cheese: 'swiss' },
+    { bread: 'wheat', protein: 'ham', cheese: 'american' },
+    { bread: 'focaccia', protein: 'tofu', cheese: 'havarti' },
   ]
-  //mock.onGet('/sandwiches').reply(() => {
-  //    new Promise(resolve => {
-  //      resolve([200, results || []]);
-  //    })
-  //  }
-  //);
 
-  // Handling state for table, search, and metadata
+  // Typically handled by API middleware
+  const sandwichApiCall = (params = {}) => {
+    setStatus(STATUS.PENDING);
+    setTimeout(() => {
+      setStatus(STATUS.RESOLVED);
+      setMetadata({ fakeMetadata, ...params })
+      setResponse({ results: sandwiches })
+    }, 3000)
+  }
+
+  // Handling state for table, API response, search, and metadata
   const [rows, setRows] = useState([]);
-  const [metadata, setMetadata] = useState({ total: 3, page: 1, perPage: 20, search: "" });
+  const [response, setResponse] = useState({ results: [] });
+  const [metadata, setMetadata] = useState({});
   const [searchQuery, updateSearchQuery] = useState('');
+  const [status, setStatus] = useState(STATUS.PENDING);
+
+  // Listen for API response and build rows according to patternfly 4 format
+  useEffect(() => {
+    const newRows = response.results.map(sandwich => {
+      const { bread, protein, cheese } = sandwich;
+      return { cells: [bread, protein, cheese] };
+    })
+    setRows(newRows);
+  }, [response])
 
   // Patternfly 4 column/cell header format
   const columnHeaders = [ __('bread'), __('protein'), __('cheese') ];
+
   // Empty content messages
   const emptyContentTitle = __("You currently don't have any sandwiches");
   const emptyContentBody = __('Please add some sandwiches.'); // needs link

@@ -20,7 +20,6 @@ const TableWrapper = ({
   organizationId,
   ...allTableProps
 }) => {
-  const dispatch = useDispatch();
   const { foremanPerPage = 20 } = useForemanSettings();
   // setting pagination to local state so it doesn't disappear when page reloads
   const [perPage, setPerPage] = useState(foremanPerPage);
@@ -35,7 +34,7 @@ const TableWrapper = ({
   };
   const paginationParams = () => ({ per_page: perPage, page });
   const fetchWithParams = (allParams = {}) => {
-    dispatch(fetchItems({ ...paginationParams(), ...allParams }));
+    fetchItems({ ...paginationParams(), ...allParams });
   };
 
   useEffect(() => updatePagination(metadata), [metadata]);
@@ -62,7 +61,7 @@ const TableWrapper = ({
 
   const onPaginationUpdate = (updatedPagination) => {
     updatePagination(updatedPagination);
-    dispatch(fetchItems({ ...paginationParams(), ...updatedPagination, search: searchQuery }));
+    fetchWithParams({ ...updatedPagination, search: searchQuery });
   };
 
   return (

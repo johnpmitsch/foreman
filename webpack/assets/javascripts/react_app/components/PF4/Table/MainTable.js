@@ -4,9 +4,9 @@ import {
   TableHeader,
   TableBody,
 } from '@patternfly/react-table';
-import { STATUS } from 'foremanReact/constants';
 import PropTypes from 'prop-types';
 
+import { STATUS } from '../../../constants';
 import EmptyStateMessage from './EmptyStateMessage';
 import Loading from '../../Loading';
 
@@ -16,7 +16,7 @@ const MainTable = ({
   ...extraTableProps
 }) => {
   const isFiltering = activeFilters || searchIsActive;
-  if (status === STATUS.PENDING) return (<Loading />);
+  if (status === STATUS.PENDING) return (<Loading showText={false} />);
   // Can we display the error message?
   if (status === STATUS.ERROR) return (<EmptyStateMessage error={error} />);
   if (status === STATUS.RESOLVED && isFiltering && rows.length === 0) {
