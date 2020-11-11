@@ -8,10 +8,8 @@ import api from '../../../redux/API/API';
 import { stringIncludes } from './helpers';
 
 // Need to update to use actual settings
-const AUTOSEARCH_DELAY = 500;
-const AUTOSEARCH_WHILE_TYPING = true;
-const autoSearchEnabled = AUTOSEARCH_WHILE_TYPING;
-const autoSearchDelay = AUTOSEARCH_DELAY;
+const AUTOSEARCH_DELAY = 'autosearch_delay';
+const AUTOSEARCH_WHILE_TYPING = 'autosearch_while_typing';
 
 class Search extends Component {
   constructor(props) {
@@ -27,7 +25,7 @@ class Search extends Component {
 
   onInputUpdate = async (searchTerm = '') => {
     // update autoSearchEnabled to use real setting
-    const { getAutoCompleteParams, patternfly4 } = this.props;
+    const { getAutoCompleteParams, patternfly4, settings: { autoSearchEnabled } } = this.props;
     const items = this.state.items.filter(({ text }) => stringIncludes(text, searchTerm));
 
     if (items.length !== this.state.items.length) {
@@ -71,7 +69,7 @@ class Search extends Component {
   }
 
   render() {
-    const { initialInputValue, patternfly4 } = this.props;
+    const { initialInputValue, patternfly4, settings: { autoSearchEnabled } } = this.props;
     return (
       <div>
         <ControlLabel srOnly>{__('Search')}</ControlLabel>

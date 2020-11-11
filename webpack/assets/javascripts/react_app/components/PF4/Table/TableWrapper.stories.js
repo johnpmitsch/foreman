@@ -6,6 +6,7 @@ import ContextFeatures from '../../Pagination/Context.fixtures';
 import { getForemanContext } from '../../../Root/Context/ForemanContext';
 import { STATUS } from '../../../constants';
 import Story from '../../../../../../stories/components/Story';
+import { mockRequest } from '../../../mockRequests';
 import store from '../../../redux';
 
 const ForemanContext = getForemanContext();
@@ -21,7 +22,22 @@ export default {
   ],
 };
 
+window.URL_PREFIX = "http://localhost";
+
+const initializeMocks = () => {
+  mockRequest({
+    url: "/api/v2/settings/autosearch_delay",
+    response: { value: 500 },
+  });
+
+  mockRequest({
+    url: "/api/v2/settings/autosearch_while_typing",
+    response: { value: true },
+  });
+};
+
 export const defaultStory = () => {
+  initializeMocks();
   const fakeMetadata = { total: 3, subtotal: 3, page: 1, per_page: 20, search: "" };
   const sandwiches = [
     { bread: 'rye', protein: 'pastrami', cheese: 'swiss' },
