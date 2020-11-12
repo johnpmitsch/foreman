@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 
-import TypeAheadSearch from './pf3Search/TypeAheadSearch';
-// eslint-disable-next-line import/no-named-default
-import { default as TypeAheadSearchPf4 } from './pf4Search/TypeAheadSearch';
+import TypeAheadSearch from './pf4Search/TypeAheadSearch';
 import { getActiveItems } from './helpers/helpers';
 
 import './TypeAhead.scss';
@@ -31,7 +29,7 @@ class TypeAhead extends Component {
 
   render() {
     const {
-      onSearch, onInputUpdate, items, actionText, patternfly4, autoSearchEnabled, ...rest
+      onSearch, onInputUpdate, items, actionText, autoSearchEnabled, ...rest
     } = this.props;
 
     const activeItems = getActiveItems(items);
@@ -72,9 +70,7 @@ class TypeAhead extends Component {
 
             return (
               <div>
-                {patternfly4 ?
-                  <TypeAheadSearchPf4 autoSearchEnabled={autoSearchEnabled} {...typeAheadProps} /> :
-                  <TypeAheadSearch actionText={actionText} {...typeAheadProps} />}
+                <TypeAheadSearch autoSearchEnabled={autoSearchEnabled} {...typeAheadProps} />
               </div>
           );
 }}
@@ -96,14 +92,12 @@ TypeAhead.propTypes = {
   onSearch: PropTypes.func.isRequired,
   actionText: PropTypes.string,
   initialInputValue: PropTypes.string,
-  patternfly4: PropTypes.bool,
   autoSearchEnabled: PropTypes.bool.isRequired,
 };
 
 TypeAhead.defaultProps = {
   actionText: 'Search',
   initialInputValue: '',
-  patternfly4: false,
 };
 
 export default TypeAhead;

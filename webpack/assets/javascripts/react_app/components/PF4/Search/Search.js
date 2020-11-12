@@ -25,7 +25,7 @@ class Search extends Component {
 
   onInputUpdate = async (searchTerm = '') => {
     // update autoSearchEnabled to use real setting
-    const { getAutoCompleteParams, patternfly4, settings: { autoSearchEnabled } } = this.props;
+    const { getAutoCompleteParams, settings: { autoSearchEnabled } } = this.props;
     const items = this.state.items.filter(({ text }) => stringIncludes(text, searchTerm));
 
     if (items.length !== this.state.items.length) {
@@ -48,7 +48,7 @@ class Search extends Component {
       });
     }
 
-    if (autoSearchEnabled && patternfly4 && searchTerm.length > 0) {
+    if (autoSearchEnabled && searchTerm.length > 0) {
       this.autoSearch(searchTerm);
     }
   };
@@ -69,7 +69,7 @@ class Search extends Component {
   }
 
   render() {
-    const { initialInputValue, patternfly4, settings: { autoSearchEnabled } } = this.props;
+    const { initialInputValue, settings: { autoSearchEnabled } } = this.props;
     return (
       <div>
         <ControlLabel srOnly>{__('Search')}</ControlLabel>
@@ -78,7 +78,6 @@ class Search extends Component {
           onInputUpdate={this.onInputUpdate}
           onSearch={this.onSearch}
           initialInputValue={initialInputValue}
-          patternfly4={patternfly4}
           autoSearchEnabled={autoSearchEnabled}
         />
       </div>
@@ -105,7 +104,6 @@ Search.propTypes = {
   loadSetting: PropTypes.func.isRequired,
   updateSearchQuery: PropTypes.func,
   initialInputValue: PropTypes.string,
-  patternfly4: PropTypes.bool,
   settings: PropTypes.shape({
     autoSearchEnabled: PropTypes.bool,
     autoSearchDelay: PropTypes.number,
@@ -115,7 +113,6 @@ Search.propTypes = {
 Search.defaultProps = {
   updateSearchQuery: undefined,
   initialInputValue: '',
-  patternfly4: false,
   settings: {
     autoSearchEnabled: true,
   },
