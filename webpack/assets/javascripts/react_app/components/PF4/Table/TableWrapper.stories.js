@@ -24,6 +24,7 @@ export default {
 
 window.URL_PREFIX = "http://localhost";
 
+// This isn't working
 const initializeMocks = () => {
   mockRequest({
     url: "/api/v2/settings/autosearch_delay",

@@ -1,4 +1,4 @@
-import { KEYCODES } from 'foremanReact/common/keyCodes';
+import { KEYCODES } from '../../../../common/keyCodes';
 
 const keyPressHandler = (
   e, isOpen, activeItems, highlightedIndex,

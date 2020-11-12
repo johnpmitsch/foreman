@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { ControlLabel } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { translate as __ } from 'foremanReact/common/I18n';
+import { translate as __ } from '../../../common/I18n';
 import TypeAhead from '../TypeAhead';
 import api from '../../../redux/API/API';
 import { stringIncludes } from './helpers';
